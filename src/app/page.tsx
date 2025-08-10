@@ -26,53 +26,53 @@ export default function Home() {
 
   // Array of terrible local GIFs from your assets folder
   const gifs = [
-    `/assets/creeping-video-game.gif`,
-    `/assets/bioware-mass-effect.gif`,
-    `/assets/да-конечно.gif`,
-    `/assets/6P4G4_O1GI095KVU3C9.gif`,
-    `/assets/vsgif_com__.2872463.gif`,
-    `/assets/pigeon-ai-pigeon-brainrot.gif`,
-    `/assets/dusku.gif`,
-    `/assets/tenor.gif`,
-    `/assets/yaya-alien.gif`,
-    `/assets/xd-horses.gif`,
-    `/assets/bCAlveo.gif`,
-    `/assets/weird-trippy.gif`,
-    `/assets/fish-wtf.gif`,
-    `/assets/sticker_2.gif`,
-    `/assets/image0 (1).gif`,
-    `/assets/vsgif_com__.2877797.gif`,
-    `/assets/fish.gif`,
-    `/assets/TVo9.gif`,
-    `/assets/4f8W.gif`,
-    `/assets/6kVieam.gif`,
-    `/assets/Gw0uu9eWsAA3jbX.gif`,
-    `/assets/boa-tarde.gif`,
-    `/assets/bp7.gif`,
-    `/assets/brainrot-nerve-burst.gif`,
-    `/assets/ekoi-ekoi-dancekid.gif`,
-    `/assets/fetrt.gif`,
-    `/assets/formg.gif`,
-    `/assets/george-carlin-content-aware-scaling.gif`,
-    `/assets/gif.gif`,
-    `/assets/giphy.gif`,
-    `/assets/glitch-crazy.gif`,
-    `/assets/heavy-rain-game-glitch.gif`,
-    `/assets/horse.gif`,
-    `/assets/locked-in-alien-alien.gif`,
-    `/assets/pigeon-lebron.gif`,
-    `/assets/pigeon-tired.gif`,
-    `/assets/puffer-fish.gif`,
-    `/assets/rat-dance.gif`,
-    `/assets/rock-wwe.gif`,
-    `/assets/shiteyanyo-speen.gif`,
-    `/assets/spongebob-spongebob-meme.gif`,
-    `/assets/thumbs-up.gif`,
-    `/assets/tumblr_p3kgnuboc41wvuif9o1_500.gif`,
-    `/assets/vacuate.gif`,
-    `/assets/vsgif_com_d-sanic-running-slowly_.3493758.gif`,
-    `/assets/vsgif_com_sanic-slaps-a-person_.3494570.gif`,
-    `/assets/xd-meme.gif`,
+    `./assets/creeping-video-game.gif`,
+    `./assets/bioware-mass-effect.gif`,
+    `./assets/да-конечно.gif`,
+    `./assets/6P4G4_O1GI095KVU3C9.gif`,
+    `./assets/vsgif_com__.2872463.gif`,
+    `./assets/pigeon-ai-pigeon-brainrot.gif`,
+    `./assets/dusku.gif`,
+    `./assets/tenor.gif`,
+    `./assets/yaya-alien.gif`,
+    `./assets/xd-horses.gif`,
+    `./assets/bCAlveo.gif`,
+    `./assets/weird-trippy.gif`,
+    `./assets/fish-wtf.gif`,
+    `./assets/sticker_2.gif`,
+    `./assets/image0 (1).gif`,
+    `./assets/vsgif_com__.2877797.gif`,
+    `./assets/fish.gif`,
+    `./assets/TVo9.gif`,
+    `./assets/4f8W.gif`,
+    `./assets/6kVieam.gif`,
+    `./assets/Gw0uu9eWsAA3jbX.gif`,
+    `./assets/boa-tarde.gif`,
+    `./assets/bp7.gif`,
+    `./assets/brainrot-nerve-burst.gif`,
+    `./assets/ekoi-ekoi-dancekid.gif`,
+    `./assets/fetrt.gif`,
+    `./assets/formg.gif`,
+    `./assets/george-carlin-content-aware-scaling.gif`,
+    `./assets/gif.gif`,
+    `./assets/giphy.gif`,
+    `./assets/glitch-crazy.gif`,
+    `./assets/heavy-rain-game-glitch.gif`,
+    `./assets/horse.gif`,
+    `./assets/locked-in-alien-alien.gif`,
+    `./assets/pigeon-lebron.gif`,
+    `./assets/pigeon-tired.gif`,
+    `./assets/puffer-fish.gif`,
+    `./assets/rat-dance.gif`,
+    `./assets/rock-wwe.gif`,
+    `./assets/shiteyanyo-speen.gif`,
+    `./assets/spongebob-spongebob-meme.gif`,
+    `./assets/thumbs-up.gif`,
+    `./assets/tumblr_p3kgnuboc41wvuif9o1_500.gif`,
+    `./assets/vacuate.gif`,
+    `./assets/vsgif_com_d-sanic-running-slowly_.3493758.gif`,
+    `./assets/vsgif_com_sanic-slaps-a-person_.3494570.gif`,
+    `./assets/xd-meme.gif`,
   ];
 
   const streamingLinks = [
@@ -88,6 +88,8 @@ export default function Home() {
   useEffect(() => {
     setIsClient(true);
     setVisitorNumber(Math.floor(Math.random() * 999999));
+    // Trigger initial chaos for full GIF display
+    setChaosCounter(1);
   }, []);
 
   // Generate GIF styles when chaos counter changes  
@@ -108,8 +110,8 @@ export default function Home() {
     // Pre-generate all GIF styles to avoid hydration mismatches
     const allStyles = [];
     
-    // Desktop GIFs (25)
-    for (let i = 0; i < 25; i++) {
+    // Desktop GIFs (35) - increased from 25 for more initial chaos
+    for (let i = 0; i < 35; i++) {
       allStyles.push({
         type: 'desktop',
         width: Math.floor(getRandomValue(i * 4, 30, 150)),
@@ -119,14 +121,14 @@ export default function Home() {
         zIndex: Math.floor(getRandomValue(i * 4 + 4, 1, 8)),
         rotate: Math.floor(getRandomValue(i * 4 + 5, 0, 360)),
         scale: Number(getRandomValue(i * 4 + 6, 0.4, 1.4).toFixed(3)),
-        opacity: Number(getRandomValue(i * 4 + 7, 0.3, 0.7).toFixed(3)),
+        opacity: Number(getRandomValue(i * 4 + 7, 0.4, 0.8).toFixed(3)), // Higher initial opacity
         animationDelay: Number(getRandomValue(i * 4 + 8, 0, 3).toFixed(3)),
         animationDuration: Number(getRandomValue(i * 4 + 9, 1, 3).toFixed(3)),
       });
     }
     
-    // Mobile GIFs (8)
-    for (let i = 0; i < 8; i++) {
+    // Mobile GIFs (12) - increased from 8
+    for (let i = 0; i < 12; i++) {
       allStyles.push({
         type: 'mobile',
         width: Math.floor(getRandomValue(i * 8 + 100, 20, 80)),
@@ -136,14 +138,14 @@ export default function Home() {
         zIndex: Math.floor(getRandomValue(i * 8 + 104, 1, 3)),
         rotate: Math.floor(getRandomValue(i * 8 + 105, 0, 360)),
         scale: Number(getRandomValue(i * 8 + 106, 0.3, 0.8).toFixed(3)),
-        opacity: Number(getRandomValue(i * 8 + 107, 0.2, 0.5).toFixed(3)),
+        opacity: Number(getRandomValue(i * 8 + 107, 0.3, 0.6).toFixed(3)), // Higher initial opacity
         animationDelay: Number(getRandomValue(i * 8 + 108, 0, 4).toFixed(3)),
         animationDuration: Number(getRandomValue(i * 8 + 109, 1.5, 3.5).toFixed(3)),
       });
     }
     
-    // Small GIFs (20)
-    for (let i = 0; i < 20; i++) {
+    // Small GIFs (25) - increased from 20
+    for (let i = 0; i < 25; i++) {
       allStyles.push({
         type: 'small',
         width: Math.floor(getRandomValue(i * 10 + 200, 15, 85)),
@@ -153,14 +155,14 @@ export default function Home() {
         zIndex: Math.floor(getRandomValue(i * 10 + 204, 1, 6)),
         rotate: Math.floor(getRandomValue(i * 10 + 205, 0, 360)),
         scale: Number(getRandomValue(i * 10 + 206, 0.3, 1.1).toFixed(3)),
-        opacity: Number(getRandomValue(i * 10 + 207, 0.2, 0.6).toFixed(3)),
+        opacity: Number(getRandomValue(i * 10 + 207, 0.3, 0.7).toFixed(3)), // Higher initial opacity
         animationDelay: Number(getRandomValue(i * 10 + 208, 0, 4).toFixed(3)),
         animationDuration: Number(getRandomValue(i * 10 + 209, 0.8, 2.8).toFixed(3)),
       });
     }
     
-    // Spinning GIFs (15)
-    for (let i = 0; i < 15; i++) {
+    // Spinning GIFs (20) - increased from 15
+    for (let i = 0; i < 20; i++) {
       allStyles.push({
         type: 'spin',
         width: Math.floor(getRandomValue(i * 12 + 300, 20, 100)),
@@ -170,14 +172,14 @@ export default function Home() {
         zIndex: Math.floor(getRandomValue(i * 12 + 304, 1, 5)),
         rotate: Math.floor(getRandomValue(i * 12 + 305, 0, 360)),
         scale: Number(getRandomValue(i * 12 + 306, 0.4, 1.2).toFixed(3)),
-        opacity: Number(getRandomValue(i * 12 + 307, 0.2, 0.7).toFixed(3)),
+        opacity: Number(getRandomValue(i * 12 + 307, 0.3, 0.8).toFixed(3)), // Higher initial opacity
         animationDelay: Number(getRandomValue(i * 12 + 308, 0, 2).toFixed(3)),
         animationDuration: Number(getRandomValue(i * 12 + 309, 1, 3).toFixed(3)),
       });
     }
     
     setGifStyles(allStyles);
-  }, [chaosCounter]);
+  }, [chaosCounter, isClient]);
 
   // Function to trigger chaotic GIF repositioning
   const triggerChaos = (gifIndex: number) => {
@@ -332,7 +334,7 @@ export default function Home() {
             {/* Footer info in overlay */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-yellow-300 p-2 sm:p-3 border-2 sm:border-4 border-red-500 w-full text-center overflow-hidden whitespace-nowrap">
               <div className="animate-marquee inline-block font-bold text-xs sm:text-sm">
-                💎 Best viewed in Netscape Navigator 💎 Last updated: 09/11/2001 💎 Webmaster: SICK_BEATS_4U@hotmail.com 💎
+                💎 Best viewed in Netscape Navigator 💎 Last updated: 09/11/2001 💎
               </div>
             </div>
           </div>
@@ -436,8 +438,8 @@ export default function Home() {
       {/* Only render GIFs on client side to avoid hydration issues */}
       {isClient && (
         <>
-          {/* Scattered GIFs everywhere - REDUCED FOR MOBILE */}
-          {gifStyles.slice(0, 25).map((style, i) => (
+          {/* Scattered GIFs everywhere - INCREASED FOR MORE INITIAL CHAOS */}
+          {gifStyles.slice(0, 35).map((style, i) => (
             <img
               key={`desktop-${i}`}
               src={gifs[i % gifs.length]}
@@ -450,15 +452,15 @@ export default function Home() {
                 left: `${style.left}%`,
                 zIndex: style.zIndex + 10, // Higher z-index for visibility
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
-                opacity: Math.min(0.9, style.opacity + 0.3), // More visible but capped
+                opacity: Math.min(0.9, style.opacity + 0.2), // Boosted but not too much
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
               }}
             />
           ))}
           
-          {/* Mobile-only minimal GIFs */}
-          {gifStyles.slice(25, 33).map((style, i) => (
+          {/* Mobile-only GIFs - INCREASED */}
+          {gifStyles.slice(35, 47).map((style, i) => (
             <img
               key={`mobile-${i}`}
               src={gifs[i % gifs.length]}
@@ -471,15 +473,15 @@ export default function Home() {
                 left: `${style.left}%`,
                 zIndex: style.zIndex + 15, // Much higher z-index for mobile
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
-                opacity: Math.min(0.9, style.opacity + 0.4), // Much more visible on mobile
+                opacity: Math.min(0.9, style.opacity + 0.3), // Boosted for mobile visibility
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
               }}
             />
           ))}
           
-          {/* Additional layer of smaller chaotic GIFs - DESKTOP ONLY */}
-          {gifStyles.slice(33, 53).map((style, i) => (
+          {/* Additional layer of smaller chaotic GIFs - INCREASED */}
+          {gifStyles.slice(47, 72).map((style, i) => (
             <img
               key={`small-${i}`}
               src={gifs[(i + 20) % gifs.length]}
@@ -492,15 +494,15 @@ export default function Home() {
                 left: `${style.left}%`,
                 zIndex: style.zIndex + 8, // Boost visibility
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
-                opacity: Math.min(0.85, style.opacity + 0.25), // More visible
+                opacity: Math.min(0.85, style.opacity + 0.2), // Boosted opacity
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
               }}
             />
           ))}
           
-          {/* Third layer - spinning chaos GIFs - DESKTOP ONLY */}
-          {gifStyles.slice(53, 68).map((style, i) => (
+          {/* Third layer - spinning chaos GIFs - INCREASED */}
+          {gifStyles.slice(72, 92).map((style, i) => (
             <img
               key={`spin-${i}`}
               src={gifs[(i + 35) % gifs.length]}
@@ -513,7 +515,7 @@ export default function Home() {
                 left: `${style.left}%`,
                 zIndex: style.zIndex + 12, // Higher z-index for spinning chaos
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
-                opacity: Math.min(0.9, style.opacity + 0.3), // More visible spinning
+                opacity: Math.min(0.9, style.opacity + 0.2), // Boosted spinning visibility
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
               }}
