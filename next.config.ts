@@ -12,7 +12,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // No assetPrefix or basePath needed for custom domain
+  // Configure for GitHub Pages deployment
+  basePath: '/everythingsuckseverythingfucks',
+  assetPrefix: '/everythingsuckseverythingfucks',
 };
 
 export default nextConfig;
