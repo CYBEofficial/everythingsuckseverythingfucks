@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎵 EVERYTHING SUCKS EVERYTHING FUCKS 🎵
 
-## Getting Started
+## BILLAIN THE BOSNIAN BADDY
 
-First, run the development server:
+Welcome to the most chaotic, terrible, and wonderfully awful music website on the internet! This is a tribute to 90s web design at its absolute worst (and best).
 
+### 🔥 Live Site
+**GitHub Pages**: https://CYBEofficial.github.io/everythingsuckseverythingfucks
+
+### 🎯 Features
+- **47 chaotic background GIFs** that reposition on hover for maximum visual assault
+- **Intentionally terrible 90s web design** with every bad practice imaginable
+- **SoundCloud integration** for the ESEF track
+- **Fake virus popups** (they just redirect to music, don't worry!)
+- **Mobile responsive** design (unfortunately making chaos mobile-friendly)
+- **Maximum visual chaos** with spinning elements and profanity everywhere
+- **Marquee elements** because it's not 1999 without scrolling text
+- **Comic Sans vibes** with Impact font and rainbow text shadows
+
+### 🛠️ Tech Stack
+- **Next.js 15** with static export for GitHub Pages
+- **TypeScript** (somehow making chaos type-safe)
+- **Tailwind CSS** for the terrible styling
+- **Pure chaotic energy** and 90s nostalgia
+
+### 🚀 Local Development
 ```bash
+# Clone the chaos
+git clone https://github.com/CYBEofficial/everythingsuckseverythingfucks.git
+cd everythingsuckseverythingfucks
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to experience the chaos locally.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🎨 Design Philosophy
+This site embraces everything terrible about 90s web design:
+- ✅ **Excessive animated GIFs** scattered everywhere
+- ✅ **Garish color combinations** that hurt your eyes
+- ✅ **Deprecated HTML elements** like `<marquee>`
+- ✅ **Comic Sans aesthetic** with Impact fonts
+- ✅ **Auto-playing elements** and animations
+- ✅ **Popup windows** with fake virus warnings
+- ✅ **Inline styles** everywhere (linters hate this!)
+- ✅ **Maximum visual noise** and chaos
+- ✅ **Profanity-laden content** for that authentic edge-lord vibe
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🎵 About ESEF
+**BILLAIN THE BOSNIAN BADDY** presents the ultimate chaotic musical experience. ESEF (Everything Sucks Everything Fucks) is a celebration of controlled chaos in both music and web design.
 
-## Learn More
+### 🔧 GitHub Pages Deployment
+This site uses GitHub Actions for automatic deployment:
+- Pushes to `main` branch trigger automatic builds
+- Static export optimized for GitHub Pages
+- All 47 GIFs included in the deployment
+- Mobile-responsive chaos guaranteed
 
-To learn more about Next.js, take a look at the following resources:
+### ⚠️ Warning
+This site may cause:
+- **Seizures** from excessive animations
+- **Nostalgic flashbacks** to dial-up internet days
+- **Uncontrollable laughter** at the absurdity
+- **Temporary blindness** from color combinations
+- **Existential crisis** about modern web design
+- **Sudden urge** to visit Angelfire and GeoCities
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🎮 Interactive Features
+- **Hover over streaming links** to trigger chaotic GIF repositioning
+- **Click the virus popup** for a musical surprise
+- **Experience different chaos levels** on mobile vs desktop
+- **Scroll through the madness** (yes, scrolling actually works!)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 📱 Mobile Experience
+Despite being intentionally terrible, this site is somehow mobile-responsive:
+- Reduced GIF chaos for mobile performance
+- Larger touch targets for clumsy 90s-style buttons
+- Responsive typography that scales the chaos
+- Maintains visual assault across all screen sizes
 
-## Deploy on Vercel
+### 🤝 Contributing
+Want to make this site even more terrible? Contributions welcome!
+- Add more chaotic GIFs
+- Increase visual noise
+- Add more 90s web elements
+- Make it even more offensive to modern design sensibilities
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📝 License
+This project is licensed under the "Do Whatever You Want But Don't Blame Me" license.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+**Best viewed in Netscape Navigator 4.0**
+
+*Last updated: 09/11/2001*
+
+*Webmaster: SICK_BEATS_4U@hotmail.com*
+
+---
+
+### 🔥 Fun Facts
+- Contains 47 unique GIFs for maximum chaos
+- Uses deprecated HTML elements for authenticity
+- Violates every modern web design principle
+- Somehow still mobile-responsive
+- Actually includes real music (it's quite good!)
+- Makes linters cry with excessive inline styles
+
+**Visit the live site and experience the beautiful chaos! 🎵🔥💀**
