@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/everythingsuckseverythingfucks' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/everythingsuckseverythingfucks' : '',
+  // No assetPrefix or basePath needed for custom domain
 };
 
 export default nextConfig;
