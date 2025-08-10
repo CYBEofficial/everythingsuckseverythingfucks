@@ -2,12 +2,26 @@
 
 import { useState, useEffect } from 'react';
 
+interface GifStyle {
+  type: string;
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  zIndex: number;
+  rotate: number;
+  scale: number;
+  opacity: number;
+  animationDelay: number;
+  animationDuration: number;
+}
+
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [currentGif, setCurrentGif] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const [visitorNumber, setVisitorNumber] = useState(123456);
-  const [gifStyles, setGifStyles] = useState<any[]>([]);
+  const [gifStyles, setGifStyles] = useState<GifStyle[]>([]);
   const [chaosCounter, setChaosCounter] = useState(0);
 
   // Array of terrible local GIFs from your assets folder
@@ -192,9 +206,11 @@ export default function Home() {
         
           {/* Marquee header */}
           <div className="w-full mb-6">
-            <marquee className="bg-red-600 text-yellow-300 font-bold text-xl p-2 border-4 border-blue-500">
-              🔥🔥🔥 WELCOME TO THE WORST FUCKING MUSIC SITE ON THE INTERNET!!! 🔥🔥🔥 CLICK BELOW TO SUCK AND FUCK!!! 🎵🎵🎵
-            </marquee>
+            <div className="bg-red-600 text-yellow-300 font-bold text-xl p-2 border-4 border-blue-500 overflow-hidden whitespace-nowrap">
+              <div className="animate-marquee inline-block">
+                🔥🔥🔥 WELCOME TO THE WORST FUCKING MUSIC SITE ON THE INTERNET!!! 🔥🔥🔥 CLICK BELOW TO SUCK AND FUCK!!! 🎵🎵🎵
+              </div>
+            </div>
           </div>
 
           {/* Terrible title - MOBILE RESPONSIVE */}
@@ -314,10 +330,10 @@ export default function Home() {
             </button>
             
             {/* Footer info in overlay */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-yellow-300 p-2 sm:p-3 border-2 sm:border-4 border-red-500 w-full text-center">
-              <marquee className="font-bold text-xs sm:text-sm">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-yellow-300 p-2 sm:p-3 border-2 sm:border-4 border-red-500 w-full text-center overflow-hidden whitespace-nowrap">
+              <div className="animate-marquee inline-block font-bold text-xs sm:text-sm">
                 💎 Best viewed in Netscape Navigator 💎 Last updated: 09/11/2001 💎 Webmaster: SICK_BEATS_4U@hotmail.com 💎
-              </marquee>
+              </div>
             </div>
           </div>
           
