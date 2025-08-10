@@ -33,7 +33,11 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 EOF
     
+    # Switch asset paths back to absolute for custom domain
+    sed -i '' 's|`\./assets/|`/assets/|g' src/app/page.tsx
+    
     echo "✅ Next.js config updated for custom domain"
+    echo "✅ Asset paths updated for custom domain"
     
 elif [ "$1" = "github-pages" ]; then
     echo "Configuring for GitHub Pages (cybeofficial.github.io/everythingsuckseverythingfucks)..."
@@ -68,7 +72,11 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 EOF
     
+    # Switch asset paths to relative for GitHub Pages
+    sed -i '' 's|`/assets/|`./assets/|g' src/app/page.tsx
+    
     echo "✅ Next.js config updated for GitHub Pages"
+    echo "✅ Asset paths updated for GitHub Pages"
     
 else
     echo "Usage: ./switch-config.sh [custom-domain|github-pages]"
