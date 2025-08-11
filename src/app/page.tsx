@@ -23,6 +23,8 @@ export default function Home() {
   const [visitorNumber, setVisitorNumber] = useState(123456);
   const [gifStyles, setGifStyles] = useState<GifStyle[]>([]);
   const [chaosCounter, setChaosCounter] = useState(0);
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  const [showEnterOverlay, setShowEnterOverlay] = useState(true);
 
   // Array of terrible local GIFs from your assets folder
   const gifs = [
@@ -92,6 +94,79 @@ export default function Home() {
     setChaosCounter(1);
   }, []);
 
+  // Timer-based chaos trigger - runs every 3 seconds
+  useEffect(() => {
+    if (!isClient) return;
+    
+    const chaosInterval = setInterval(() => {
+      // Randomly change the current GIF and trigger chaos
+      const randomGifIndex = Math.floor(Math.random() * gifs.length);
+      setCurrentGif(randomGifIndex);
+      setChaosCounter(prev => prev + 1);
+      console.log('🎨 Auto-chaos triggered! GIF repositioning...');
+    }, 3000); // Every 3 seconds
+
+    return () => clearInterval(chaosInterval);
+  }, [isClient, gifs.length]);
+
+  // Function to handle entering the site with autoplay - SIMPLIFIED APPROACH
+  const handleEnterSite = () => {
+    setAutoplayEnabled(true);
+    setShowEnterOverlay(false);
+    
+    console.log('🔥 USER CLICKED ENTER - AUTOPLAY ENABLED! 🔥');
+    console.log('📱 Device check:', {
+      userAgent: navigator.userAgent,
+      isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+      platform: navigator.platform,
+      touchSupport: 'ontouchstart' in window
+    });
+    
+    // SINGLE autoplay attempt during the user gesture - no multiple calls
+    const audioElements = document.querySelectorAll('audio');
+    const iframes = document.querySelectorAll('iframe');
+    
+    console.log(`🎵 Found ${audioElements.length} audio elements, ${iframes.length} iframes`);
+    
+    // Try HTML5 audio immediately
+    audioElements.forEach((audio, index) => {
+      audio.volume = 0.9;
+      audio.currentTime = 0;
+      audio.play()
+        .then(() => console.log(`✅ Audio ${index} started successfully`))
+        .catch(e => console.log(`❌ Audio ${index} failed:`, e.message));
+    });
+    
+    // Single SoundCloud iframe reload with autoplay
+    iframes.forEach((iframe, index) => {
+      if (iframe.src.includes('soundcloud')) {
+        console.log(`🎵 Processing SoundCloud iframe ${index} - ONE TIME ONLY`);
+        
+        // Force complete iframe reload with autoplay - ONCE
+        const originalSrc = iframe.src;
+        iframe.src = '';
+        
+        setTimeout(() => {
+          const newSrc = originalSrc.replace('auto_play=false', 'auto_play=true');
+          iframe.src = newSrc;
+          console.log('🎵 SoundCloud iframe reloaded with autoplay - DONE');
+          
+          // Send a few play commands but don't reload again
+          setTimeout(() => {
+            iframe.contentWindow?.postMessage({cmd: 'play'}, 'https://w.soundcloud.com');
+            console.log('🎵 Widget play command sent');
+          }, 1000);
+          
+          setTimeout(() => {
+            iframe.contentWindow?.postMessage({cmd: 'play'}, 'https://w.soundcloud.com');
+            console.log('🎵 Widget play command sent (retry)');
+          }, 2000);
+          
+        }, 200);
+      }
+    });
+  };
+
   // Generate GIF styles when chaos counter changes  
   useEffect(() => {
     if (!isClient) return;
@@ -118,7 +193,7 @@ export default function Home() {
         height: Math.floor(getRandomValue(i * 4 + 1, 30, 150)),
         top: Math.floor(getRandomValue(i * 4 + 2, 0, 100)),
         left: Math.floor(getRandomValue(i * 4 + 3, 0, 100)),
-        zIndex: Math.floor(getRandomValue(i * 4 + 4, 1, 8)),
+        zIndex: Math.floor(getRandomValue(i * 4 + 4, 1, 5)),
         rotate: Math.floor(getRandomValue(i * 4 + 5, 0, 360)),
         scale: Number(getRandomValue(i * 4 + 6, 0.4, 1.4).toFixed(3)),
         opacity: Number(getRandomValue(i * 4 + 7, 0.4, 0.8).toFixed(3)), // Higher initial opacity
@@ -135,7 +210,7 @@ export default function Home() {
         height: Math.floor(getRandomValue(i * 8 + 101, 20, 80)),
         top: Math.floor(getRandomValue(i * 8 + 102, 0, 100)),
         left: Math.floor(getRandomValue(i * 8 + 103, 0, 100)),
-        zIndex: Math.floor(getRandomValue(i * 8 + 104, 1, 3)),
+        zIndex: Math.floor(getRandomValue(i * 8 + 104, 1, 2)),
         rotate: Math.floor(getRandomValue(i * 8 + 105, 0, 360)),
         scale: Number(getRandomValue(i * 8 + 106, 0.3, 0.8).toFixed(3)),
         opacity: Number(getRandomValue(i * 8 + 107, 0.3, 0.6).toFixed(3)), // Higher initial opacity
@@ -152,7 +227,7 @@ export default function Home() {
         height: Math.floor(getRandomValue(i * 10 + 201, 15, 85)),
         top: Math.floor(getRandomValue(i * 10 + 202, 0, 100)),
         left: Math.floor(getRandomValue(i * 10 + 203, 0, 100)),
-        zIndex: Math.floor(getRandomValue(i * 10 + 204, 1, 6)),
+        zIndex: Math.floor(getRandomValue(i * 10 + 204, 1, 4)),
         rotate: Math.floor(getRandomValue(i * 10 + 205, 0, 360)),
         scale: Number(getRandomValue(i * 10 + 206, 0.3, 1.1).toFixed(3)),
         opacity: Number(getRandomValue(i * 10 + 207, 0.3, 0.7).toFixed(3)), // Higher initial opacity
@@ -169,7 +244,7 @@ export default function Home() {
         height: Math.floor(getRandomValue(i * 12 + 301, 20, 100)),
         top: Math.floor(getRandomValue(i * 12 + 302, 0, 100)),
         left: Math.floor(getRandomValue(i * 12 + 303, 0, 100)),
-        zIndex: Math.floor(getRandomValue(i * 12 + 304, 1, 5)),
+        zIndex: Math.floor(getRandomValue(i * 12 + 304, 1, 3)),
         rotate: Math.floor(getRandomValue(i * 12 + 305, 0, 360)),
         scale: Number(getRandomValue(i * 12 + 306, 0.4, 1.2).toFixed(3)),
         opacity: Number(getRandomValue(i * 12 + 307, 0.3, 0.8).toFixed(3)), // Higher initial opacity
@@ -188,162 +263,340 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      {/* Terrible background gradient */}
-      <div 
-        className="fixed inset-0 bg-gradient-to-br from-lime-200 via-pink-200 to-yellow-200"
+    <>
+    {/* COMPLETELY ISOLATED FAB BUTTON - TRULY FIXED TO VIEWPORT */}
+      <a
+        href="https://soundcloud.com/billain/esef"
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff00ff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          position: 'fixed',
+          bottom: '30px',
+          right: '20px',
+          display: 'block',
+          width: '150px',
+          height: '60px',
+          borderRadius: '50px',
+          background: 'linear-gradient(45deg, #ff6500, #dc2626)',
+          border: '3px solid #ffffff',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          textDecoration: 'none',
+          color: 'white',
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '8px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          paddingTop: '8px',
+          boxSizing: 'border-box',
+          zIndex: 2147483647, // Maximum possible z-index value
         }}
-      />
+      >
+        <div style={{ fontSize: '20px', lineHeight: '1' }}>☁️</div>
+        <div style={{ fontSize: '16px', lineHeight: '1' }}>SOUNDCLOUD</div>
+      </a>
 
-      {/* Main container - FIRST IN DOM ORDER - MOBILE OPTIMIZED */}
-      <div className="relative z-50 flex flex-col items-center justify-start p-2 sm:p-4 min-h-screen">
-        <div className="w-full max-w-4xl bg-white border-4 sm:border-8 border-black shadow-2xl p-3 sm:p-6 rounded-none my-4"
-             style={{
-               backgroundColor: 'rgba(255, 255, 255, 0.95)', // More opaque on mobile
-               backgroundImage: 'linear-gradient(45deg, #ffffff 50%, #f0f0f0 50%)',
-               backgroundSize: '20px 20px'
-             }}>
-        
-          {/* Marquee header */}
-          <div className="w-full mb-6">
-            <div className="bg-red-600 text-yellow-300 font-bold text-xl p-2 border-4 border-blue-500 overflow-hidden whitespace-nowrap">
-              <div className="animate-marquee inline-block">
-                🔥🔥🔥 WELCOME TO THE WORST FUCKING MUSIC SITE ON THE INTERNET!!! 🔥🔥🔥 CLICK BELOW TO SUCK AND FUCK!!! 🎵🎵🎵
-              </div>
-            </div>
-          </div>
-
-          {/* Terrible title - MOBILE RESPONSIVE */}
-          <div className="text-center mb-4 sm:mb-6">
-            <h1 className="text-2xl sm:text-5xl font-bold text-red-600 animate-pulse mb-2 sm:mb-4" 
-                style={{
-                  textShadow: '2px 2px 0px #0000ff, 4px 4px 0px #ff00ff, 6px 6px 0px #00ff00',
-                  fontFamily: 'Impact, Arial Black, sans-serif'
-                }}>
-              🎵 EVERYTHING SUCKS EVERYTHING FUCKS 🎵
-            </h1>
-            <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-2 sm:p-4 border-4 sm:border-8 border-yellow-400 rotate-1 sm:rotate-2">
-              <h2 className="text-sm sm:text-xl font-bold animate-bounce">
-                BILLAIN THE BOSNIAN BADDY
-              </h2>
-            </div>
-            <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-2 sm:p-4 border-4 sm:border-8 border-yellow-400 rotate-1 sm:rotate-2">
-              <h2 className="text-sm sm:text-xl font-bold animate-bounce">
-                ★ ☆ ★ THE ULTIMATE EXPERIENCE OF EVERYTHING SUCKS AND FUCKS ★ ☆ ★
-              </h2>
-            </div>
-          </div>
-
-          {/* Embedded SoundCloud player - MOBILE RESPONSIVE */}
-          <div className="mb-4 sm:mb-6 p-1 sm:p-2 bg-red-600 border-2 sm:border-4 border-yellow-300">
-           <iframe 
-             width="100%" 
-             height="300" 
-             scrolling="no" 
-             frameBorder="no" 
-             allow="autoplay" 
-             src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2138170161%3Fsecret_token%3Ds-MHqVhA2z3Wz&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-           ></iframe>
-           <div style={{
-             fontSize: '10px', 
-             color: '#cccccc',
-             lineBreak: 'anywhere',
-             wordBreak: 'normal',
-             overflow: 'hidden',
-             whiteSpace: 'nowrap',
-             textOverflow: 'ellipsis', 
-             fontFamily: 'Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif',
-             fontWeight: 100
-           }}>
-             <a href="https://soundcloud.com/billain" title="Billain" target="_blank" rel="noopener noreferrer" style={{color: '#cccccc', textDecoration: 'none'}}>Billain</a> · <a href="https://soundcloud.com/billain/esef/s-MHqVhA2z3Wz" title="ESEF" target="_blank" rel="noopener noreferrer" style={{color: '#cccccc', textDecoration: 'none'}}>ESEF</a>
-           </div>
-          </div>
-
-          {/* Main streaming links container - MOBILE OPTIMIZED */}
-          <div className="bg-white border-4 sm:border-8 border-red-500 p-3 sm:p-6 rounded-none shadow-lg w-full mb-4 sm:mb-6" 
-               style={{
-                 backgroundImage: 'linear-gradient(45deg, #ffff00 25%, transparent 25%), linear-gradient(-45deg, #ffff00 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ffff00 75%), linear-gradient(-45deg, transparent 75%, #ffff00 75%)',
-                 backgroundSize: '15px 15px',
-                 backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px'
-               }}>
-            
-            <div className="bg-blue-600 text-white p-3 sm:p-4 mb-3 sm:mb-4 border-2 sm:border-4 border-yellow-400 text-center">
-              <h3 className="text-lg sm:text-2xl font-bold animate-pulse">
-                🎧 CHOOSE YOUR MUSIC! 🎧
-              </h3>
-              <p className="text-yellow-300 font-bold mt-1 sm:mt-2 text-sm sm:text-base">Click any link below for tunes that SUCK!</p>
-            </div>
-
-            <div className="space-y-2 sm:space-y-3">
-              {streamingLinks.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block p-4 sm:p-4 border-2 sm:border-4 border-black text-center font-bold text-base sm:text-lg hover:animate-bounce transition-all min-h-[50px] flex items-center justify-center"
-                  style={{
-                    backgroundColor: link.color,
-                    color: index % 2 === 0 ? '#000000' : '#ffffff',
-                    textShadow: index % 2 === 0 ? '1px 1px 0px #ffffff' : '1px 1px 0px #000000',
-                    transform: `rotate(${(index % 2 === 0 ? -1 : 1) * 1}deg)`
-                  }}
-                  onMouseEnter={() => triggerChaos(index)}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-
-            {/* Under construction using your GIFs */}
-            <div className="mt-6 p-4 bg-yellow-300 border-4 border-red-600 text-center">
-              <img 
-                src={gifs[(currentGif + 5) % gifs.length]}
-                alt="gif"
-                className="inline-block w-12 h-12 mr-2"
-              />
-              <span className="font-bold text-red-600 text-xl">GET FUCKED!</span>
-              <img 
-                src={gifs[(currentGif + 10) % gifs.length]}
-                alt="gif"
-                className="inline-block w-12 h-12 ml-2"
-              />
-            </div>
-          </div>
-
-          {/* Bottom elements in overlay - MOBILE OPTIMIZED */}
-          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
-            {/* Visitor counter */}
-            <div className="bg-black text-lime-400 p-3 sm:p-4 border-2 border-lime-400 font-mono">
-              <div className="text-center">
-                <span className="text-xs sm:text-sm">You are visitor #</span>
-                <span className="text-lg sm:text-xl font-bold animate-pulse">{visitorNumber}</span>
-              </div>
-            </div>
-
-            {/* Popup trigger button - LARGER FOR MOBILE */}
+    <div className="min-h-screen" style={{ position: 'relative', overflow: 'hidden' }}>
+      {/* FULLSCREEN ENTER OVERLAY - MANDATORY USER INTERACTION */}
+      {showEnterOverlay && (
+        <div 
+          className="fixed inset-0 bg-black flex items-center justify-center"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#000000',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 999999
+          }}
+        >
+          <div className="text-center">
+            {/* Classic 90s Web 1.0 enter button */}
             <button
-              onClick={() => setShowPopup(true)}
-              className="bg-red-600 text-yellow-300 p-4 sm:p-3 border-4 border-yellow-300 font-bold animate-pulse text-base sm:text-lg min-h-[60px] px-6"
+              onClick={handleEnterSite}
+              className="font-bold text-4xl transition-all"
+              style={{
+                fontFamily: 'Arial, sans-serif',
+                minWidth: '200px',
+                maxWidth: '200px',
+                minHeight: '120px',
+                padding: '20px 30px',
+                backgroundColor: '#C0C0C0',
+                color: '#000000',
+                border: '4px outset #C0C0C0',
+                borderTop: '4px solid #FFFFFF',
+                borderLeft: '4px solid #FFFFFF', 
+                borderRight: '4px solid #808080',
+                borderBottom: '4px solid #808080',
+                boxShadow: 'inset 2px 2px 4px rgba(255,255,255,0.8), inset -2px -2px 4px rgba(0,0,0,0.3)',
+                cursor: 'pointer',
+                textShadow: '1px 1px 0px rgba(255,255,255,0.8)',
+                letterSpacing: '1px'
+              }}
+              onMouseDown={(e) => {
+                // 90s button press effect
+                e.currentTarget.style.border = '4px inset #C0C0C0';
+                e.currentTarget.style.borderTop = '4px solid #808080';
+                e.currentTarget.style.borderLeft = '4px solid #808080';
+                e.currentTarget.style.borderRight = '4px solid #FFFFFF';
+                e.currentTarget.style.borderBottom = '4px solid #FFFFFF';
+                e.currentTarget.style.boxShadow = 'inset -2px -2px 4px rgba(255,255,255,0.8), inset 2px 2px 4px rgba(0,0,0,0.3)';
+              }}
+              onMouseUp={(e) => {
+                // Return to normal state
+                e.currentTarget.style.border = '4px outset #C0C0C0';
+                e.currentTarget.style.borderTop = '4px solid #FFFFFF';
+                e.currentTarget.style.borderLeft = '4px solid #FFFFFF';
+                e.currentTarget.style.borderRight = '4px solid #808080';
+                e.currentTarget.style.borderBottom = '4px solid #808080';
+                e.currentTarget.style.boxShadow = 'inset 2px 2px 4px rgba(255,255,255,0.8), inset -2px -2px 4px rgba(0,0,0,0.3)';
+              }}
+              onMouseLeave={(e) => {
+                // Ensure normal state when mouse leaves
+                e.currentTarget.style.border = '4px outset #C0C0C0';
+                e.currentTarget.style.borderTop = '4px solid #FFFFFF';
+                e.currentTarget.style.borderLeft = '4px solid #FFFFFF';
+                e.currentTarget.style.borderRight = '4px solid #808080';
+                e.currentTarget.style.borderBottom = '4px solid #808080';
+                e.currentTarget.style.boxShadow = 'inset 2px 2px 4px rgba(255,255,255,0.8), inset -2px -2px 4px rgba(0,0,0,0.3)';
+              }}
             >
-              🚨 CLICK FOR FREE STUFF! 🚨
+              ⚠️ <strong>CLICK HERE</strong> FOR EVERYTHING SUCKS EVERYTHING FUCKS ⚠️
             </button>
-            
-            {/* Footer info in overlay */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-yellow-300 p-2 sm:p-3 border-2 sm:border-4 border-red-500 w-full text-center overflow-hidden whitespace-nowrap">
-              <div className="animate-marquee inline-block font-bold text-xs sm:text-sm">
-                💎 Best viewed in Netscape Navigator 💎 Last updated: 09/11/2001 💎
+          </div>
+        </div>
+      )}
+
+      <div style={{ zIndex: 100001, position: 'relative' }}>
+        {/* Terrible background gradient */}
+        <div 
+          className="fixed inset-0 bg-gradient-to-br from-lime-200 via-pink-200 to-yellow-200"
+          style={{
+            opacity: .3,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff00ff' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}
+        />
+
+        {/* Main container - FIRST IN DOM ORDER - MOBILE OPTIMIZED */}
+        <div className="relative z-50 flex flex-col items-center justify-start p-2 sm:p-4 min-h-screen">
+          <div className="w-full max-w-4xl border-4 sm:border-8 border-black shadow-2xl p-3 sm:p-6 rounded-none my-4"
+              style={{
+                backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,0.6) 50%, rgba(240,240,240,0.6) 50%)',
+                backgroundSize: '20px 20px'
+              }}>
+          
+            {/* Marquee header */}
+            <div className="w-full mb-6">
+              <div className="bg-red-600 text-yellow-300 font-bold text-xl p-2 border-4 border-blue-500 overflow-hidden whitespace-nowrap">
+                <div className="animate-marquee inline-block">
+                  🔥🔥🔥 WELCOME TO THE WORST FUCKING MUSIC SITE ON THE INTERNET!!! 🔥🔥🔥 CLICK BELOW TO SUCK AND FUCK!!! 🎵🎵🎵
+                </div>
               </div>
             </div>
+
+            {/* Terrible title - MOBILE RESPONSIVE */}
+            <div className="text-center mb-4 sm:mb-6">
+              <h1 className="text-2xl sm:text-5xl font-bold text-red-600 animate-pulse mb-2 sm:mb-4" 
+                  style={{
+                    textShadow: '2px 2px 0px #0000ff, 4px 4px 0px #ff00ff, 6px 6px 0px #00ff00',
+                    fontFamily: 'Impact, Arial Black, sans-serif'
+                  }}>
+                🎵 EVERYTHING SUCKS EVERYTHING FUCKS 🎵
+              </h1>
+              <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-2 sm:p-4 border-4 sm:border-8 border-yellow-400 rotate-1 sm:rotate-2">
+                <h2 className="text-sm sm:text-xl font-bold animate-bounce">
+                  BILLAIN THE BOSNIAN BADDY
+                </h2>
+              </div>
+              <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-2 sm:p-4 border-4 sm:border-8 border-yellow-400 rotate-1 sm:rotate-2">
+                <h2 className="text-sm sm:text-xl font-bold animate-bounce">
+                  ★ ☆ ★ THE ULTIMATE EXPERIENCE OF EVERYTHING SUCKS AND FUCKS ★ ☆ ★
+                </h2>
+              </div>
+            </div>
+
+            {/* Embedded SoundCloud player - MOBILE-RESPONSIVE IFRAME */}
+            <div className="mb-4 sm:mb-6 p-1 sm:p-2 bg-red-600 border-2 sm:border-4 border-yellow-300 relative" style={{ zIndex: 100000 }}>
+            {isClient && (
+              <iframe 
+                width="100%" 
+                height={typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? "166" : "300"}
+                scrolling="no" 
+                frameBorder="no" 
+                allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture"
+                title="SoundCloud Player - ESEF by Billain" 
+                src={`https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2138170161%3Fsecret_token%3Ds-MHqVhA2z3Wz&color=%23ff5500&auto_play=${autoplayEnabled ? 'true' : 'false'}&hide_related=true&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&visual=${typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 'false' : 'true'}`}
+                style={{
+                  minWidth: '100%',
+                  width: '100%',
+                  maxWidth: '100%',
+                  height: typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? '166px' : '300px',
+                  border: 'none',
+                  position: 'relative',
+                  zIndex: 100001
+                }}
+              />
+            )}
+            {!isClient && (
+              <div 
+                style={{
+                  width: '100%',
+                  height: '300px',
+                  backgroundColor: '#ff5500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '18px',
+                  fontWeight: 'bold'
+                }}
+              >
+                Loading SoundCloud Player...
+              </div>
+            )}
+            
+            {/* Backup HTML5 audio with simplified mobile handling */}
+            <audio 
+              autoPlay={autoplayEnabled}
+              loop 
+              preload="auto"
+              style={{ display: 'none' }}
+              controls={false}
+              ref={(audio) => {
+                if (audio && autoplayEnabled) {
+                  console.log('🎵 Setting up HTML5 audio...');
+                  
+                  // Simple audio setup
+                  const playAudio = () => {
+                    audio.volume = 0.9;
+                    audio.currentTime = 0;
+                    
+                    // Mobile-specific: force reload
+                    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                      console.log('📱 Mobile detected - reloading audio');
+                      audio.load();
+                    }
+                    
+                    audio.play()
+                      .then(() => console.log('✅ HTML5 audio playing successfully'))
+                      .catch(e => console.log('❌ HTML5 audio failed:', e.message));
+                  };
+                  
+                  // Try to play immediately and once more
+                  playAudio();
+                  setTimeout(playAudio, 500);
+                }
+              }}
+            >
+              <source src="https://cf-media.sndcdn.com/KDdMJvN2YvRN.128.mp3?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiKjovL2NmLW1lZGlhLnNuZGNkbi5jb20vS0RkTUp2TjJZdlJOLjEyOC5tcDMqIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzM2NjQwMDAwfX19XX0_&Signature=VUzRYM6Y~Fj7D-QxP7r-xKdJePiTJoiKv7V7WKC0T0Z2YyXxn2fWKGjqVZ3QrjJw-VlS9YpKgQhWJvlZgT9~0ZOZ7RVhJ2S1QyqKsWl1GNmM6A__" type="audio/mpeg" />
+              <track kind="captions" />
+            </audio>
+            
+            <div style={{
+              fontSize: '10px', 
+              color: '#cccccc',
+              lineBreak: 'anywhere',
+              wordBreak: 'normal',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis', 
+              fontFamily: 'Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif',
+              fontWeight: 100
+            }}>
+              <a href="https://soundcloud.com/billain" title="Billain" target="_blank" rel="noopener noreferrer" style={{color: '#cccccc', textDecoration: 'none'}}>Billain</a> · <a href="https://soundcloud.com/billain/esef/s-MHqVhA2z3Wz" title="ESEF" target="_blank" rel="noopener noreferrer" style={{color: '#cccccc', textDecoration: 'none'}}>ESEF</a>
+            </div>
+            </div>
+
+            {/* Main streaming links container - MOBILE OPTIMIZED */}
+            <div className="border-4 sm:border-8 border-red-500 p-3 sm:p-6 rounded-none shadow-lg w-full mb-4 sm:mb-6" 
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                  backgroundImage: 'linear-gradient(45deg, rgba(255,255,0,0.6) 25%, transparent 25%), linear-gradient(-45deg, rgba(255,255,0,0.6) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(255,255,0,0.6) 75%), linear-gradient(-45deg, transparent 75%, rgba(255,255,0,0.6) 75%)',
+                  backgroundSize: '15px 15px',
+                  backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px'
+                }}>
+              
+              <div className="bg-blue-600 text-white p-3 sm:p-4 mb-3 sm:mb-4 border-2 sm:border-4 border-yellow-400 text-center">
+                <h3 className="text-lg sm:text-2xl font-bold animate-pulse">
+                  🎧 CHOOSE YOUR MUSIC! 🎧
+                </h3>
+                <p className="text-yellow-300 font-bold mt-1 sm:mt-2 text-sm sm:text-base">Click any link below for tunes that SUCK!</p>
+              </div>
+
+              <div className="space-y-2 sm:space-y-3">
+                {streamingLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 sm:p-4 border-2 sm:border-4 border-black text-center font-bold text-base sm:text-lg hover:animate-bounce transition-all min-h-[50px] flex items-center justify-center"
+                    style={{
+                      backgroundColor: link.color,
+                      color: index % 2 === 0 ? '#000000' : '#ffffff',
+                      textShadow: index % 2 === 0 ? '1px 1px 0px #ffffff' : '1px 1px 0px #000000',
+                      transform: `rotate(${(index % 2 === 0 ? -1 : 1) * 1}deg)`
+                    }}
+                    onMouseEnter={() => triggerChaos(index)}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+
+              {/* Under construction using your GIFs */}
+              <div className="mt-6 p-4 bg-yellow-300 border-4 border-red-600 text-center">
+                <img 
+                  src={gifs[(currentGif + 5) % gifs.length]}
+                  alt="gif"
+                  className="inline-block w-12 h-12 mr-2"
+                />
+                <span className="font-bold text-red-600 text-xl">GET FUCKED!</span>
+                <img 
+                  src={gifs[(currentGif + 10) % gifs.length]}
+                  alt="gif"
+                  className="inline-block w-12 h-12 ml-2"
+                />
+              </div>
+            </div>
+
+            {/* Bottom elements in overlay - MOBILE OPTIMIZED */}
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+              {/* Visitor counter */}
+              <div className="bg-black text-lime-400 p-3 sm:p-4 border-2 border-lime-400 font-mono">
+                <div className="text-center">
+                  <span className="text-xs sm:text-sm">You are visitor #</span>
+                  <span className="text-lg sm:text-xl font-bold animate-pulse">{visitorNumber}</span>
+                </div>
+              </div>
+
+              {/* Popup trigger button - LARGER FOR MOBILE */}
+              <button
+                onClick={() => setShowPopup(true)}
+                className="bg-red-600 text-yellow-300 p-4 sm:p-3 border-4 border-yellow-300 font-bold animate-pulse text-base sm:text-lg min-h-[60px] px-6"
+              >
+                🚨 CLICK FOR FREE STUFF! 🚨
+              </button>
+              
+              {/* Footer info in overlay */}
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-yellow-300 p-2 sm:p-3 border-2 sm:border-4 border-red-500 w-full text-center overflow-hidden whitespace-nowrap">
+                <div className="animate-marquee inline-block font-bold text-xs sm:text-sm">
+                  💎 Best viewed in Netscape Navigator 💎 Last updated: 09/11/2001 💎
+                </div>
+              </div>
+            </div>
+            
           </div>
-          
         </div>
       </div>
       
-      {/* Annoying floating elements - still floating over everything */}
-      <div className="fixed bottom-4 right-4 bg-lime-400 border-4 border-purple-600 p-2 animate-spin z-30">
+      {/* Annoying floating elements - positioned differently to avoid conflicts */}
+      <div className="fixed bottom-4 left-4 bg-lime-400 border-4 border-purple-600 p-2 animate-spin z-30">
         <span className="font-bold text-purple-800">NEW!</span>
       </div>
 
@@ -357,7 +610,7 @@ export default function Home() {
             left: 0, 
             right: 0, 
             bottom: 0,
-            zIndex: 99999,
+            zIndex: 100010,
             backgroundColor: 'rgba(0, 0, 0, 0.85)',
             backdropFilter: 'blur(2px)'
           }}
@@ -380,8 +633,8 @@ export default function Home() {
           <div 
             className="w-full max-w-md mx-4 shadow-2xl relative border-8 border-black"
             style={{ 
+              zIndex: 100010, 
               position: 'relative',
-              zIndex: 100000,
               maxWidth: '450px',
               minHeight: '320px',
               backgroundColor: '#ffff00', // Bright yellow background
@@ -420,7 +673,10 @@ export default function Home() {
                     OK - DOWNLOAD NOW!
                   </button>
                   <button 
-                    onClick={() => setShowPopup(false)}
+                    onClick={() => {
+                      window.open('https://soundcloud.com/billain/esef', '_blank');
+                      setShowPopup(false);
+                    }}
                     className="bg-red-400 border-2 border-black px-4 py-2 font-bold hover:bg-red-300 text-white shadow-lg"
                   >
                     X CLOSE
@@ -444,17 +700,18 @@ export default function Home() {
               key={`desktop-${i}`}
               src={gifs[i % gifs.length]}
               alt="terrible gif"
-              className="fixed animate-pulse pointer-events-none hidden sm:block"
+              className="animate-pulse pointer-events-none hidden sm:block"
               style={{
                 width: `${style.width}px`,
                 height: `${style.height}px`,
                 top: `${style.top}%`,
                 left: `${style.left}%`,
-                zIndex: style.zIndex + 10, // Higher z-index for visibility
+                zIndex: style.zIndex + 5, // Reduced boost to keep below FAB
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
                 opacity: Math.min(0.9, style.opacity + 0.2), // Boosted but not too much
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
+                position: 'fixed'
               }}
             />
           ))}
@@ -465,17 +722,18 @@ export default function Home() {
               key={`mobile-${i}`}
               src={gifs[i % gifs.length]}
               alt="terrible gif"
-              className="fixed animate-pulse pointer-events-none block sm:hidden"
+              className="animate-pulse pointer-events-none block sm:hidden"
               style={{
                 width: `${style.width}px`,
                 height: `${style.height}px`,
                 top: `${style.top}%`,
                 left: `${style.left}%`,
-                zIndex: style.zIndex + 15, // Much higher z-index for mobile
+                zIndex: style.zIndex + 8, // Reduced boost for mobile
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
                 opacity: Math.min(0.9, style.opacity + 0.3), // Boosted for mobile visibility
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
+                position: 'fixed'
               }}
             />
           ))}
@@ -486,17 +744,18 @@ export default function Home() {
               key={`small-${i}`}
               src={gifs[(i + 20) % gifs.length]}
               alt="small terrible gif"
-              className="fixed animate-bounce pointer-events-none hidden md:block"
+              className="animate-bounce pointer-events-none hidden md:block"
               style={{
                 width: `${style.width}px`,
                 height: `${style.height}px`,
                 top: `${style.top}%`,
                 left: `${style.left}%`,
-                zIndex: style.zIndex + 8, // Boost visibility
+                zIndex: style.zIndex + 4, // Reduced boost
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
                 opacity: Math.min(0.85, style.opacity + 0.2), // Boosted opacity
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
+                position: 'fixed'
               }}
             />
           ))}
@@ -507,17 +766,18 @@ export default function Home() {
               key={`spin-${i}`}
               src={gifs[(i + 35) % gifs.length]}
               alt="spinning terrible gif"
-              className="fixed animate-spin pointer-events-none hidden lg:block"
+              className="animate-spin pointer-events-none hidden lg:block"
               style={{
                 width: `${style.width}px`,
                 height: `${style.height}px`,
                 top: `${style.top}%`,
                 left: `${style.left}%`,
-                zIndex: style.zIndex + 12, // Higher z-index for spinning chaos
+                zIndex: style.zIndex + 6, // Reduced boost for spinning chaos
                 transform: `rotate(${style.rotate}deg) scale(${style.scale})`,
                 opacity: Math.min(0.9, style.opacity + 0.2), // Boosted spinning visibility
                 animationDelay: `${style.animationDelay}s`,
                 animationDuration: `${style.animationDuration}s`,
+                position: 'fixed'
               }}
             />
           ))}
@@ -528,18 +788,19 @@ export default function Home() {
               key={`hover-${i}`}
               src={gifs[(currentGif + i) % gifs.length]}
               alt="hover reactive gif"
-              className="fixed animate-bounce pointer-events-none hidden sm:block"
+              className="animate-bounce pointer-events-none hidden sm:block"
               style={{
                 width: `${80 + i * 20}px`,
                 height: `${80 + i * 20}px`,
                 top: `${10 + i * 25}%`,
                 right: `${5 + i * 15}%`,
-                zIndex: 35 + i, // Much higher z-index for visibility
+                zIndex: 15 + i, // Fixed lower z-index for hover GIFs
                 transform: `rotate(${currentGif * 10 + i * 45}deg) scale(${1 + currentGif * 0.1})`,
                 opacity: Math.min(0.9, 0.8 + currentGif * 0.02), // More visible but capped
                 transition: 'all 0.3s ease-in-out',
                 animationDelay: `${i * 0.1}s`,
                 animationDuration: `${0.5 + currentGif * 0.1}s`,
+                position: 'fixed'
               }}
             />
           ))}
@@ -550,23 +811,25 @@ export default function Home() {
               key={`corner-${i}`}
               src={gifs[(currentGif * 2 + i + 10) % gifs.length]}
               alt="corner reactive gif"
-              className="fixed animate-pulse pointer-events-none hidden lg:block"
+              className="animate-pulse pointer-events-none hidden lg:block"
               style={{
                 width: `${60 + currentGif * 2}px`,
                 height: `${60 + currentGif * 2}px`,
                 bottom: `${10 + i * 20}%`,
                 left: `${5 + i * 10}%`,
-                zIndex: 30 + i, // Higher z-index for corner visibility
+                zIndex: 10 + i, // Fixed lower z-index for corner GIFs
                 transform: `rotate(${-currentGif * 15 + i * 90}deg) scale(${0.8 + currentGif * 0.05})`,
                 opacity: Math.min(0.85, 0.6 + currentGif * 0.03), // More visible but capped
                 transition: 'all 0.4s ease-out',
                 animationDelay: `${i * 0.2}s`,
                 animationDuration: `${1 + currentGif * 0.05}s`,
+                position: 'fixed'
               }}
             />
           ))}
         </>
       )}
     </div>
+    </>
   );
 }
