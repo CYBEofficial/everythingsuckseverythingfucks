@@ -67,6 +67,7 @@ export default function Home() {
     `./assets/puffer-fish.gif`,
     `./assets/rat-dance.gif`,
     `./assets/rock-wwe.gif`,
+    `./assets/shanan.gif`,
     `./assets/shiteyanyo-speen.gif`,
     `./assets/spongebob-spongebob-meme.gif`,
     `./assets/thumbs-up.gif`,
